@@ -32,6 +32,7 @@ exports.updateAnime = (req, res) => {
     .catch((error) => res.status(404).json({ msg: error }));
 };
 
+// req.params.id accessible car l'url c'est router.delete("/:id", animesService.deleteAnime);
 exports.deleteAnime = (req, res) => {
   animeModel
     .findOneAndDelete({ _id: req.params.id })
