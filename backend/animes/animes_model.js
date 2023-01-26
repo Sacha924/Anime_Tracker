@@ -9,6 +9,6 @@ const animeSchema = new mongoose.Schema({
   animeLink: { type: String },
 });
 
-const Anime = mongoose.model("animes", animeSchema);
+const Anime = mongoose.model("animes", animeSchema); // so animes is the name of my collection on the DB
 
 module.exports = Anime;
