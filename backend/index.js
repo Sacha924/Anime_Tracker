@@ -1,11 +1,14 @@
-const express = require('express')
-const app = express()
-const animeController = require('./animes/animes_controller')
-const port = 3000
+const express = require("express");
+const animeController = require("./animes/animes_controller");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
-app.use('/test', animeController )
+const app = express();
+const port = 3000;
 
+app.use(bodyParser.json());
+app.use("/animes", animeController);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log(`Example app listening at http://localhost:${port}`);
+});
