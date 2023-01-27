@@ -16,14 +16,13 @@ function App() {
 
   return (
     <div className="App">
-      <p> yo le gang</p>
       <div>
-        {animeList.map((anime) => (
-          <div>
+        {animeList.map((anime, index) => (
+          <div className="anime-card" key={index}>
             <h1>{anime.name}</h1>
             <p>{anime.lastEpisodeView}</p>
-            <p>{anime.coverUrl}</p>
-            <p>{anime.animeLink}</p>
+            <img src={anime.coverUrl} />
+            <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString()}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
           </div>
         ))}
       </div>
