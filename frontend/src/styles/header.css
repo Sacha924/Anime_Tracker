@@ -1,14 +1,15 @@
 .header {
   width: 96%;
+  padding: 0px 40px 0px 40px;
+  margin-bottom: 100px;
+}
+.header-firstRow {
   display: flex;
-  position: absolute;
-  top: 0;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 20px 0px 20px;
 }
 
-.header button,
+.header-firstRow button,
 .submit {
   background-color: #1abc9c;
   color: white;
@@ -17,18 +18,33 @@
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
+  margin-top: 20px;
   transition: background-color 0.5s ease-in-out;
 }
 
-.header button:hover,
+.header-firstRow button:hover,
 .submit:hover {
   background-color: #5299d3;
 }
 
-.header form input {
+form input {
   padding: 8px 10px;
   border: none;
   border-radius: 5px;
   font-size: 14px;
   margin-right: 10px;
+}
+
+.header-secondRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.formField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
 }
