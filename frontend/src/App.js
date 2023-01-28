@@ -14,6 +14,10 @@ function App() {
     setAnimeList(data);
   };
 
+  const handleIncrement = (index) => {};
+
+  const handleDecrement = (index) => {};
+
   return (
     <div className="App">
       <div>
@@ -21,13 +25,22 @@ function App() {
           <div className="anime-card" key={index}>
             <h1>{anime.name}</h1>
             <p>{anime.lastEpisodeView}</p>
-            <img src={anime.coverUrl} />
-            <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString()}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
+            <div className="img-container">
+              <img src={anime.coverUrl} />
+              <div className="img-btns-container">
+                <button className="img-btn prev-btn" onClick={handleDecrement}>
+                  -
+                </button>
+                <button className="img-btn next-btn" onClick={handleIncrement}>
+                  +
+                </button>
+              </div>
+            </div>
+            <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
 export default App;
