@@ -1,4 +1,4 @@
-import "./App.css";
+import "./styles/App.css";
 import { useState, useEffect } from "react";
 
 const URL = "http://localhost:3000/animes/";
@@ -30,8 +30,13 @@ function App() {
     retrieveAllAnimes();
   };
 
+  const modifyAnime = async (id) => {};
+
+  const deleteAnime = async (id) => {};
+
   return (
     <div className="App">
+      
       <div>
         {animeList.map((anime, index) => (
           <div className="anime-content">
@@ -51,7 +56,14 @@ function App() {
               </div>
               <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
             </div>
-            <div></div>
+            <div>
+              <button className="delete" onClick={() => modifyAnime(anime._id)}>
+                MODIFY
+              </button>
+              <button className="delete" onClick={() => deleteAnime(anime._id)}>
+                DELETE
+              </button>
+            </div>
           </div>
         ))}
       </div>
