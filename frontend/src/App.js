@@ -1,6 +1,6 @@
 import "./styles/App.css";
 import { useState, useEffect } from "react";
-
+import Header from "./Components/Header";
 const URL = "http://localhost:3000/animes/";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
 
   return (
     <div className="App">
-      
+      <Header />
       <div>
         {animeList.map((anime, index) => (
           <div className="anime-content">
