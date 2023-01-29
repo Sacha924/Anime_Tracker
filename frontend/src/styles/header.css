@@ -9,8 +9,8 @@
   align-items: center;
   justify-content: space-between;
 }
-.header-firstRow h1{
-  
+.header-firstRow h1 {
+  padding-left: 90px;
 }
 
 .header-firstRow button,
