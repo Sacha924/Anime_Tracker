@@ -113,8 +113,8 @@ function AnimeFrames() {
                     <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
                     <input type="text" name="coverUrl" placeholder="coverUrl" defaultValue={anime.coverUrl} ref={coverURLRef} />
                     <input type="text" name="animeLink" placeholder="animeLink" defaultValue={anime.animeLink} ref={animeEpisodeLinkRef} />
-                    <button type="submit">Modify</button>
-                    <button onClick={() => setFormModifyAnime("")}>Cancel</button>
+                    <button className ="modifyButton" type="submit">Modify</button>
+                    <button className ="cancelModify" onClick={() => setFormModifyAnime("")}>Cancel</button>
                   </form>
                 )}
               </div>
