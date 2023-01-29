@@ -31,7 +31,17 @@ function AnimeFrames() {
 
   const modifyAnime = async (id) => {};
 
-  const deleteAnime = async (id) => {};
+  const deleteAnime = async (id) => {
+    const animeToDelete = await fetch(`${URL}${id}`);
+    await fetch(`${URL}${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(animeToDelete),
+    });
+    retrieveAllAnimes();
+  };
 
   return (
     <div className="App">
