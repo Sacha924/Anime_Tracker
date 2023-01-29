@@ -1,5 +1,6 @@
 import "./../styles/header.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { AnimeFilterContext } from "./AnimeFilter";
 
 const URL = "http://localhost:3000/animes/";
 
@@ -8,12 +9,10 @@ function Header() {
   const lastEpisodeSeenRef = useRef(null);
   const coverURLRef = useRef(null);
   const animeEpisodeLinkRef = useRef(null);
+  const nameForSearchRef = useRef(null);
   const [formAddAnime, setFormAddAnime] = useState(false);
 
-  const searchForAnimes = async () => {
-    // UTILISATION DE USEREF ? TENTER D ABORD SANS VOIR SI JE PEUX ACCEDER A LA VALUE SANS
-    
-  };
+  const { setFilter } = useContext(AnimeFilterContext);
 
   const addAnime = async () => {
     const newAnime = {
@@ -45,8 +44,13 @@ function Header() {
         </button>
 
         <h1>My Anime List</h1>
-        <form onSubmit={searchForAnimes}>
-          <input type="text" placeholder="Jujutsu Kaisen" />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setFilter(nameForSearchRef.current.value.toLowerCase());
+          }}
+        >
+          <input type="text" placeholder="Jujutsu Kaisen" ref={nameForSearchRef} />
           <input className="submit" type="submit" value="🔎" />
         </form>
       </div>

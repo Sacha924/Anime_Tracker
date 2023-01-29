@@ -1,5 +1,7 @@
 import "./../styles/AnimeFrames.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { AnimeFilterContext } from "./AnimeFilter";
+
 const URL = "http://localhost:3000/animes/";
 
 function AnimeFrames() {
@@ -9,14 +11,18 @@ function AnimeFrames() {
   const animeEpisodeLinkRef = useRef(null);
   const [animeList, setAnimeList] = useState([]);
   const [formModifyAnime, setFormModifyAnime] = useState(false);
+
+  const { filter } = useContext(AnimeFilterContext);
+
   useEffect(() => {
     retrieveAllAnimes();
-  }, []);
+  }, [filter]);
 
   const retrieveAllAnimes = async () => {
     const response = await fetch(URL);
     const data = await response.json();
-    setAnimeList(data);
+    const filteredData = filter !== "" ? data.filter((anime) => anime.name.toLowerCase().includes(filter)) : data;
+    setAnimeList(filteredData);
   };
 
   const handleEpisodeChange = async (id, value) => {
