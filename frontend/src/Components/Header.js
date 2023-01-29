@@ -15,9 +15,7 @@ function Header() {
     
   };
 
-  const addAnime = async (e) => {
-    e.preventDefault();
-    console.log(e.target.value);
+  const addAnime = async () => {
     const newAnime = {
       name: nameRef.current.value,
       lastEpisodeView: lastEpisodeSeenRef.current.value,
