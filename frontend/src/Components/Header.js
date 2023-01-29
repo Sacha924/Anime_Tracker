@@ -38,7 +38,7 @@ function Header() {
       <div className="header-firstRow">
         <button
           onClick={() => {
-            setFormAddAnime(true);
+            setFormAddAnime(!formAddAnime);
           }}
         >
           Add Anime

@@ -29,6 +29,7 @@ function AnimeFrames() {
     retrieveAllAnimes();
   };
 
+  const moreAnime = async (id) => {};
   const modifyAnime = async (id) => {};
 
   const deleteAnime = async (id) => {
@@ -48,7 +49,11 @@ function AnimeFrames() {
       <div>
         {animeList.map((anime, index) => (
           <div className="anime-content">
-            <div></div>
+            <div>
+              <button className="watch-more-button" onClick={() => moreAnime(anime._id)}>
+              ▶ Watch More
+              </button>
+            </div>
             <div className="anime-card" key={index}>
               <h1>{anime.name}</h1>
               <p>{anime.lastEpisodeView}</p>
@@ -65,10 +70,10 @@ function AnimeFrames() {
               <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
             </div>
             <div>
-              <button className="delete" onClick={() => modifyAnime(anime._id)}>
+              <button className="modify-button" onClick={() => modifyAnime(anime._id)}>
                 MODIFY
               </button>
-              <button className="delete" onClick={() => deleteAnime(anime._id)}>
+              <button className="delete-button" onClick={() => deleteAnime(anime._id)}>
                 DELETE
               </button>
             </div>

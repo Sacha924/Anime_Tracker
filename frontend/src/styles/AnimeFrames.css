@@ -16,7 +16,7 @@
   flex-direction: row;
   justify-content: space-between;
   border-radius: 40px;
-  transform: translate(-34%, 0%);
+  transform: translate(-26%, 0%);
 }
 
 .anime-card {
@@ -49,7 +49,6 @@
 .img-btn:hover {
   background-color: #f2f2f2;
   color: #222222;
-  cursor: pointer;
 }
 
 .anime-card h1 {
@@ -65,6 +64,58 @@
 .anime-card a {
   color: #00bfff;
   text-decoration: none;
+}
+
+.delete-button {
+  background-color: #ba4949;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 5px;
+  box-shadow: 0px 0px 10px #ff0000;
+  transition: all 0.5s ease;
+}
+
+.delete-button:hover {
+  background-color: #ff0000;
+}
+
+.modify-button {
+  background-color: #006699;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 5px;
+  box-shadow: 0px 0px 10px #006699;
+  transition: all 0.5s ease;
+}
+
+.modify-button:hover {
+  background-color: #3399cc;
+}
+
+.watch-more-button {
+  padding: 12px 24px;
+  border-radius: 50px;
+  background-color: #3da5b5;
+  color: white;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin: 8px;
+}
+
+.watch-more-button:hover {
+  background-color: #3bc9db;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 body::-webkit-scrollbar {
