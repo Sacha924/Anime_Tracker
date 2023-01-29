@@ -1,10 +1,14 @@
 import "./../styles/AnimeFrames.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 const URL = "http://localhost:3000/animes/";
 
 function AnimeFrames() {
+  const nameRef = useRef(null);
+  const lastEpisodeSeenRef = useRef(null);
+  const coverURLRef = useRef(null);
+  const animeEpisodeLinkRef = useRef(null);
   const [animeList, setAnimeList] = useState([]);
-
+  const [formModifyAnime, setFormModifyAnime] = useState(false);
   useEffect(() => {
     retrieveAllAnimes();
   }, []);
@@ -30,52 +34,84 @@ function AnimeFrames() {
   };
 
   const moreAnime = async (id) => {};
-  const modifyAnime = async (id) => {};
 
-  const deleteAnime = async (id) => {
-    const animeToDelete = await fetch(`${URL}${id}`);
+  const modifyAnime = async (id) => {
+    const updatedAnime = {
+      name: nameRef.current.value,
+      lastEpisodeView: lastEpisodeSeenRef.current.value,
+      coverUrl: coverURLRef.current.value,
+      animeLink: animeEpisodeLinkRef.current.value,
+    };
     await fetch(`${URL}${id}`, {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(animeToDelete),
+      body: JSON.stringify(updatedAnime),
     });
-    retrieveAllAnimes();
+
+    setFormModifyAnime(false);
+  };
+
+  const deleteAnime = async (id) => {
+    if (window.confirm("Are you sure you want to delete this anime?")) {
+      const animeToDelete = await fetch(`${URL}${id}`);
+      await fetch(`${URL}${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(animeToDelete),
+      });
+      retrieveAllAnimes();
+    }
   };
 
   return (
     <div className="App">
       <div>
         {animeList.map((anime, index) => (
-          <div className="anime-content">
-            <div>
-              <button className="watch-more-button" onClick={() => moreAnime(anime._id)}>
-              ▶ Watch More
-              </button>
-            </div>
-            <div className="anime-card" key={index}>
-              <h1>{anime.name}</h1>
-              <p>{anime.lastEpisodeView}</p>
-              <div className="img-container">
-                <button className="img-btn prev-btn" onClick={() => handleEpisodeChange(anime._id, -1)}>
-                  -
-                </button>
-                <img src={anime.coverUrl} />
-
-                <button className="img-btn next-btn" onClick={() => handleEpisodeChange(anime._id, 1)}>
-                  +
+          <div key={index}>
+            <div className="anime-content">
+              <div>
+                <button className="watch-more-button" onClick={() => moreAnime(anime._id)}>
+                  ▶ Watch More
                 </button>
               </div>
-              <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
-            </div>
-            <div>
-              <button className="modify-button" onClick={() => modifyAnime(anime._id)}>
-                MODIFY
-              </button>
-              <button className="delete-button" onClick={() => deleteAnime(anime._id)}>
-                DELETE
-              </button>
+              <div className="anime-card">
+                <h1>{anime.name}</h1>
+                <p>{anime.lastEpisodeView}</p>
+                <div className="img-container">
+                  <button className="img-btn prev-btn" onClick={() => handleEpisodeChange(anime._id, -1)}>
+                    -
+                  </button>
+                  <img src={anime.coverUrl} />
+
+                  <button className="img-btn next-btn" onClick={() => handleEpisodeChange(anime._id, 1)}>
+                    +
+                  </button>
+                </div>
+                <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
+              </div>
+              <div>
+                <button className="modify-button" onClick={() => setFormModifyAnime(anime._id)}>
+                  MODIFY
+                </button>
+
+                <button className="delete-button" onClick={() => deleteAnime(anime._id)}>
+                  DELETE
+                </button>
+                {formModifyAnime === anime._id && (
+                  <form className="formModify" onSubmit={() => modifyAnime(anime._id)}>
+                    <input type="text" name="name" placeholder="name" defaultValue={anime.name} ref={nameRef} />
+                    <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
+                    <input type="text" name="coverUrl" placeholder="coverUrl" defaultValue={anime.coverUrl} ref={coverURLRef} />
+                    <input type="text" name="animeLink" placeholder="animeLink" defaultValue={anime.animeLink} ref={animeEpisodeLinkRef} />
+                    <button type="submit">Modify</button>
+                    <button onClick={() => setFormModifyAnime("")}>Cancel</button>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         ))}
