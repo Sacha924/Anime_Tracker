@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const animeSchema = new mongoose.Schema({
   name: { type: String, unique: true, required: true },
   lastEpisodeView: { type: Number, required: true },
+  currentSeason: { type: Number},
   coverUrl: { type: String },
   animeLink: { type: String },
 });
