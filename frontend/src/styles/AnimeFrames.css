@@ -18,6 +18,26 @@
   border-radius: 40px;
   transform: translate(-26%, 0%);
 }
+.listeEpisodesSupplementaire {
+  list-style-type: square;
+  padding-left: 20px;
+}
+
+.listeEpisodesSupplementaire{
+  margin-top: 20px;
+
+}
+.listeEpisodesSupplementaire li {
+  margin-top: 10px;
+}
+.listeEpisodesSupplementaire a {
+  color: white;
+  text-decoration: none;
+}
+
+.listeEpisodesSupplementaire a:visited {
+  color: gray;
+}
 
 .anime-card {
   display: flex;

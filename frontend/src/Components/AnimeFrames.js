@@ -11,6 +11,9 @@ function AnimeFrames() {
   const animeEpisodeLinkRef = useRef(null);
   const [animeList, setAnimeList] = useState([]);
   const [formModifyAnime, setFormModifyAnime] = useState(false);
+  const [message, setMessage] = useState("▶ Watch More");
+
+  const [list, setList] = useState(null);
 
   const { filter } = useContext(AnimeFilterContext);
 
@@ -39,7 +42,28 @@ function AnimeFrames() {
     retrieveAllAnimes();
   };
 
-  const moreAnime = async (id) => {};
+  const moreAnime = async (id) => {
+    if (list === null) {
+      const newList = [];
+      const anime = await fetch(`${URL}${id}`);
+      const data = await anime.json();
+      for (let i = -5; i <= 6; i++) {
+        if (i !== 1) {
+          const numEp = (parseInt(data.lastEpisodeView) + i).toString().padStart(2, "0");
+          newList.push(
+            <li key={i}>
+              <a href={data.animeLink + numEp}> Episode {numEp} </a>
+            </li>
+          );
+        }
+      }
+      setList(newList);
+      setMessage("❌ Close This");
+    } else {
+      setList(null);
+      setMessage("▶ Watch More");
+    }
+  };
 
   const modifyAnime = async (id) => {
     const updatedAnime = {
@@ -81,8 +105,9 @@ function AnimeFrames() {
             <div className="anime-content">
               <div>
                 <button className="watch-more-button" onClick={() => moreAnime(anime._id)}>
-                  ▶ Watch More
+                  {message}
                 </button>
+                <ul className="listeEpisodesSupplementaire">{list}</ul>
               </div>
               <div className="anime-card">
                 <h1>{anime.name}</h1>
@@ -113,8 +138,12 @@ function AnimeFrames() {
                     <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
                     <input type="text" name="coverUrl" placeholder="coverUrl" defaultValue={anime.coverUrl} ref={coverURLRef} />
                     <input type="text" name="animeLink" placeholder="animeLink" defaultValue={anime.animeLink} ref={animeEpisodeLinkRef} />
-                    <button className ="modifyButton" type="submit">Modify</button>
-                    <button className ="cancelModify" onClick={() => setFormModifyAnime("")}>Cancel</button>
+                    <button className="modifyButton" type="submit">
+                      Modify
+                    </button>
+                    <button className="cancelModify" onClick={() => setFormModifyAnime("")}>
+                      Cancel
+                    </button>
                   </form>
                 )}
               </div>
