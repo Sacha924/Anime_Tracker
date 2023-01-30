@@ -9,6 +9,7 @@ function Header() {
   const lastEpisodeSeenRef = useRef(null);
   const coverURLRef = useRef(null);
   const currentSeasonRef = useRef(null);
+  const numOfEpPerSeasonRef = useRef(null);
   const animeEpisodeLinkRef = useRef(null);
   const nameForSearchRef = useRef(null);
   const [formAddAnime, setFormAddAnime] = useState(false);
@@ -20,6 +21,7 @@ function Header() {
       name: nameRef.current.value,
       lastEpisodeView: lastEpisodeSeenRef.current.value,
       currentSeason: currentSeasonRef.current.value,
+      maxEpPerSeason: numOfEpPerSeasonRef.current.value,
       coverUrl: coverURLRef.current.value,
       animeLink: animeEpisodeLinkRef.current.value,
     };
@@ -68,7 +70,11 @@ function Header() {
             </div>
             <div className="formField">
               <label> Current Season :</label>
-              <input type="text" ref={currentSeasonRef} />
+              <input type="text" placeholder="1" ref={currentSeasonRef} />
+            </div>
+            <div className="formField">
+              <label> number of episodes per season :</label>
+              <input type="text" placeholder="12" ref={numOfEpPerSeasonRef} />
             </div>
             <div className="formField">
               <label> Cover URL :</label>
