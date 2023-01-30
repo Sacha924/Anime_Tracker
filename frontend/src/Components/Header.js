@@ -8,6 +8,7 @@ function Header() {
   const nameRef = useRef(null);
   const lastEpisodeSeenRef = useRef(null);
   const coverURLRef = useRef(null);
+  const currentSeasonRef = useRef(null);
   const animeEpisodeLinkRef = useRef(null);
   const nameForSearchRef = useRef(null);
   const [formAddAnime, setFormAddAnime] = useState(false);
@@ -18,10 +19,10 @@ function Header() {
     const newAnime = {
       name: nameRef.current.value,
       lastEpisodeView: lastEpisodeSeenRef.current.value,
+      currentSeason: currentSeasonRef.current.value,
       coverUrl: coverURLRef.current.value,
       animeLink: animeEpisodeLinkRef.current.value,
     };
-    console.log(JSON.stringify(newAnime));
     await fetch(URL, {
       method: "POST",
       headers: {
@@ -59,11 +60,15 @@ function Header() {
           <form onSubmit={addAnime} style={{ marginTop: "60px" }}>
             <div className="formField">
               <label> Name :</label>
-              <input type="text" placeholder="One Piece" ref={nameRef} />
+              <input type="text" placeholder="One Piece" ref={nameRef} required />
             </div>
             <div className="formField">
               <label> Last Episode Seen :</label>
-              <input type="number" placeholder="1" ref={lastEpisodeSeenRef} />
+              <input type="number" placeholder="1" ref={lastEpisodeSeenRef} required />
+            </div>
+            <div className="formField">
+              <label> Current Season :</label>
+              <input type="text" ref={currentSeasonRef} />
             </div>
             <div className="formField">
               <label> Cover URL :</label>
