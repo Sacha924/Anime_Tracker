@@ -30,10 +30,34 @@ function AnimeFrames() {
     setAnimeList(filteredData);
   };
 
+  const getAnimeLink = async (id) => {
+    const anime = await fetch(`${URL}${id}`);
+    const data = await anime.json();
+    let link = data.animeLink;
+    const animeName = link.split("/")[4].split("/")[0];
+
+    if (![null, 1].includes(data.currentSeason)) {
+      link = link.replace(`/${animeName}/`, `/${animeName}-${data.currentSeason}/`);
+      link += `saison-${data.currentSeason}-`;
+    }
+
+    const animeLink = link + (parseInt(data.lastEpisodeView) + 1).toString().padStart(2, "0") + "-vostfr/";
+    console.log(animeLink);
+    return animeLink;
+  };
+  const handleNewEpClick = async (id) => {
+    const link = await getAnimeLink(id);
+    window.location.href = link;
+  };
+
   const handleEpisodeChange = async (id, value) => {
     const anime = await fetch(`${URL}${id}`);
     const data = await anime.json();
-    const newAnime = { ...data, lastEpisodeView: parseInt(data.lastEpisodeView) + value };
+    let newAnime = {};
+    if (data.maxEpPerSeason === data.lastEpisodeView && value === 1) newAnime = { ...data, lastEpisodeView: 1, currentSeason: data.currentSeason + 1 };
+    else if (1 === data.lastEpisodeView && value === -1) newAnime = { ...data, lastEpisodeView: data.maxEpPerSeason, currentSeason: data.currentSeason - 1 };
+    else newAnime = { ...data, lastEpisodeView: parseInt(data.lastEpisodeView) + value };
+
     await fetch(`${URL}${id}`, {
       method: "PUT",
       headers: {
@@ -130,7 +154,13 @@ function AnimeFrames() {
                     +
                   </button>
                 </div>
-                {anime.lastEpisodeView === anime.maxEpPerSeason ? "You saw the last episode of this season" : <a href={anime.animeLink + (anime.currentSeason != null && `saison-${anime.currentSeason}-`) + "episode-" + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>}
+                {anime.lastEpisodeView === anime.maxEpPerSeason ? (
+                  "You saw the last episode of this season"
+                ) : (
+                  <a href="#" onClick={() => handleNewEpClick(anime._id)} target="_blank">
+                    Episode suivant ({parseInt(anime.lastEpisodeView) + 1})
+                  </a>
+                )}
               </div>
               <div>
                 <button className="modify-button" onClick={() => setFormModifyAnime(anime._id)}>
