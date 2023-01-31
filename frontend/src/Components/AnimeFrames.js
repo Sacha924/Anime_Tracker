@@ -5,23 +5,21 @@ import { AnimeFilterContext } from "./AnimeFilter";
 const URL = "http://localhost:3000/animes/";
 
 function AnimeFrames() {
+  // UseRef Statements
   const nameRef = useRef(null);
   const lastEpisodeSeenRef = useRef(null);
   const currentSeasonRef = useRef(null);
   const numOfEpPerSeasonRef = useRef(null);
   const coverURLRef = useRef(null);
   const animeEpisodeLinkRef = useRef(null);
+  // UseState Statements
   const [animeList, setAnimeList] = useState([]);
   const [formModifyAnime, setFormModifyAnime] = useState(false);
   const [message, setMessage] = useState("▶ Watch More");
-
   const [list, setList] = useState(null);
-
+  // UseContext Statement
   const { filter } = useContext(AnimeFilterContext);
 
-  useEffect(() => {
-    retrieveAllAnimes();
-  }, [filter]);
 
   const retrieveAllAnimes = async () => {
     const response = await fetch(URL);
@@ -30,32 +28,13 @@ function AnimeFrames() {
     setAnimeList(filteredData);
   };
 
-  const getAnimeLink = async (id) => {
-    const anime = await fetch(`${URL}${id}`);
-    const data = await anime.json();
-    let link = data.animeLink;
-    const animeName = link.split("/")[4].split("/")[0];
-
-    if (![null, 1].includes(data.currentSeason)) {
-      link = link.replace(`/${animeName}/`, `/${animeName}-${data.currentSeason}/`);
-      link += `saison-${data.currentSeason}-`;
-    }
-
-    const animeLink = link + (parseInt(data.lastEpisodeView) + 1).toString().padStart(2, "0") + "-vostfr/";
-    console.log(animeLink);
-    return animeLink;
-  };
-  const handleNewEpClick = async (id) => {
-    const link = await getAnimeLink(id);
-    window.location.href = link;
-  };
-
   const handleEpisodeChange = async (id, value) => {
     const anime = await fetch(`${URL}${id}`);
     const data = await anime.json();
     let newAnime = {};
     if (data.maxEpPerSeason === data.lastEpisodeView && value === 1) newAnime = { ...data, lastEpisodeView: 1, currentSeason: data.currentSeason + 1 };
-    else if (1 === data.lastEpisodeView && value === -1) newAnime = { ...data, lastEpisodeView: data.maxEpPerSeason, currentSeason: data.currentSeason - 1 };
+    else if (data.currentSeason !== null && 1 === data.lastEpisodeView && value === -1) newAnime = { ...data, lastEpisodeView: data.maxEpPerSeason, currentSeason: data.currentSeason - 1 };
+    else if (data.currentSeason === null && 1 === data.lastEpisodeView && value === -1) newAnime = { ...data };
     else newAnime = { ...data, lastEpisodeView: parseInt(data.lastEpisodeView) + value };
 
     await fetch(`${URL}${id}`, {
@@ -65,7 +44,6 @@ function AnimeFrames() {
       },
       body: JSON.stringify(newAnime),
     });
-    retrieveAllAnimes();
   };
 
   const moreAnime = async (id) => {
@@ -91,7 +69,8 @@ function AnimeFrames() {
     }
   };
 
-  const modifyAnime = async (id) => {
+  const modifyAnime = async (id,e) => {
+    e.preventDefault();
     const updatedAnime = {
       name: nameRef.current.value,
       lastEpisodeView: lastEpisodeSeenRef.current.value,
@@ -121,8 +100,32 @@ function AnimeFrames() {
         },
         body: JSON.stringify(animeToDelete),
       });
-      retrieveAllAnimes();
     }
+  };
+  
+  useEffect(() => {
+    retrieveAllAnimes();
+  }, [modifyAnime,deleteAnime,handleEpisodeChange,filter]);
+
+  const getAnimeLink = async (id) => {
+    const anime = await fetch(`${URL}${id}`);
+    const data = await anime.json();
+    let link = data.animeLink;
+    const animeName = link.split("/")[4].split("/")[0];
+
+    if (![null, 1].includes(data.currentSeason)) {
+      link = link.replace(`/${animeName}/`, `/${animeName}-${data.currentSeason}/`);
+      link += `saison-${data.currentSeason}-`;
+    }
+
+    const animeLink = link + (parseInt(data.lastEpisodeView) + 1).toString().padStart(2, "0") + "-vostfr/";
+    console.log(animeLink);
+    return animeLink;
+  };
+
+  const handleNewEpClick = async (id) => {
+    const link = await getAnimeLink(id);
+    window.location.href = link;
   };
 
   return (
@@ -171,7 +174,7 @@ function AnimeFrames() {
                   DELETE
                 </button>
                 {formModifyAnime === anime._id && (
-                  <form className="formModify" onSubmit={() => modifyAnime(anime._id)}>
+                  <form className="formModify" onSubmit={(e) => modifyAnime(anime._id,e)}>
                     <input type="text" name="name" placeholder="name" defaultValue={anime.name} ref={nameRef} />
                     <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
                     <input type="text" placeholder="1" defaultValue={anime.currentSeason} ref={currentSeasonRef} />
