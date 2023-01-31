@@ -7,6 +7,8 @@ const URL = "http://localhost:3000/animes/";
 function AnimeFrames() {
   const nameRef = useRef(null);
   const lastEpisodeSeenRef = useRef(null);
+  const currentSeasonRef = useRef(null);
+  const numOfEpPerSeasonRef = useRef(null);
   const coverURLRef = useRef(null);
   const animeEpisodeLinkRef = useRef(null);
   const [animeList, setAnimeList] = useState([]);
@@ -69,6 +71,8 @@ function AnimeFrames() {
     const updatedAnime = {
       name: nameRef.current.value,
       lastEpisodeView: lastEpisodeSeenRef.current.value,
+      currentSeason: currentSeasonRef.current.value,
+      maxEpPerSeason: numOfEpPerSeasonRef.current.value,
       coverUrl: coverURLRef.current.value,
       animeLink: animeEpisodeLinkRef.current.value,
     };
@@ -111,7 +115,11 @@ function AnimeFrames() {
               </div>
               <div className="anime-card">
                 <h1>{anime.name}</h1>
-                <p>{anime.lastEpisodeView}</p>
+                <p>
+                  {anime.currentSeason != null && "Season " + anime.currentSeason + " "}
+                  {"Episode " + anime.lastEpisodeView}
+                  {anime.maxEpPerSeason != null && "/" + anime.maxEpPerSeason}
+                </p>
                 <div className="img-container">
                   <button className="img-btn prev-btn" onClick={() => handleEpisodeChange(anime._id, -1)}>
                     -
@@ -122,7 +130,7 @@ function AnimeFrames() {
                     +
                   </button>
                 </div>
-                <a href={anime.animeLink + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>
+                {anime.lastEpisodeView === anime.maxEpPerSeason ? "You saw the last episode of this season" : <a href={anime.animeLink + (anime.currentSeason != null && `saison-${anime.currentSeason}-`) + "episode-" + (parseInt(anime.lastEpisodeView) + 1).toString().padStart(2, "0")}> Episode suivant ({parseInt(anime.lastEpisodeView) + 1})</a>}
               </div>
               <div>
                 <button className="modify-button" onClick={() => setFormModifyAnime(anime._id)}>
@@ -136,6 +144,8 @@ function AnimeFrames() {
                   <form className="formModify" onSubmit={() => modifyAnime(anime._id)}>
                     <input type="text" name="name" placeholder="name" defaultValue={anime.name} ref={nameRef} />
                     <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
+                    <input type="text" placeholder="1" defaultValue={anime.currentSeason} ref={currentSeasonRef} />
+                    <input type="text" placeholder="12" defaultValue={anime.maxEpPerSeason} ref={numOfEpPerSeasonRef} />
                     <input type="text" name="coverUrl" placeholder="coverUrl" defaultValue={anime.coverUrl} ref={coverURLRef} />
                     <input type="text" name="animeLink" placeholder="animeLink" defaultValue={anime.animeLink} ref={animeEpisodeLinkRef} />
                     <button className="modifyButton" type="submit">

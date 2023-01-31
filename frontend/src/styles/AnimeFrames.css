@@ -23,9 +23,8 @@
   padding-left: 20px;
 }
 
-.listeEpisodesSupplementaire{
+.listeEpisodesSupplementaire {
   margin-top: 20px;
-
 }
 .listeEpisodesSupplementaire li {
   margin-top: 10px;
@@ -155,6 +154,7 @@ button:hover {
   padding: 10px;
   margin: 10px 0;
   font-size: 12px;
+  height: 26px;
   box-sizing: border-box;
   border-radius: 5px;
   border: 1px solid #ccc;
