@@ -4,10 +4,19 @@ const userController = require("./users/users_controller");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const session = require("express-session");
 require("dotenv").config();
 
 const app = express();
 const port = 3000;
+
+app.use(
+  session({
+    secret: "YOUR_SECRET_HERE",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(bodyParser.json());
 app.use(cors());
