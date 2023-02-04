@@ -1,16 +1,17 @@
 // This file is used to map API calls (Presentation Layer) with the Business-Logic layer
-
 const router = require("express").Router();
 const animesService = require("./animes_service");
+const passport = require("passport");
+require("../auth/jwt.strategy");
 
 router.get("/", animesService.getAllAnime);
 
 router.get("/:id", animesService.getAnime);
 
-router.post("/", animesService.createAnime);
+router.post("/", passport.authenticate("jwt"), animesService.createAnime);
 
-router.put("/:id", animesService.updateAnime);
+router.put("/:id", passport.authenticate("jwt"), animesService.updateAnime);
 
-router.delete("/:id", animesService.deleteAnime);
+router.delete("/:id", passport.authenticate("jwt"), animesService.deleteAnime);
 
 module.exports = router;
