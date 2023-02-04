@@ -1,6 +1,6 @@
 const express = require("express");
 const animeController = require("./animes/animes_controller");
-const animeController = require("./animes/users_controller");
+const userController = require("./users/users_controller");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
