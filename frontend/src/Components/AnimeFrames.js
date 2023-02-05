@@ -1,8 +1,10 @@
 import "./../styles/AnimeFrames.css";
 import { useState, useEffect, useRef, useContext } from "react";
 import { AnimeFilterContext } from "./AnimeFilter";
+import Cookies from "js-cookie";
 
 const URL = "http://localhost:3000/animes/";
+const JWT_TOKEN = Cookies.get("JWTtoken");
 
 function AnimeFrames() {
   // UseRef Statements
@@ -19,7 +21,6 @@ function AnimeFrames() {
   const [list, setList] = useState(null);
   // UseContext Statement
   const { filter } = useContext(AnimeFilterContext);
-
 
   const retrieveAllAnimes = async () => {
     const response = await fetch(URL);
@@ -41,6 +42,7 @@ function AnimeFrames() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${JWT_TOKEN}`,
       },
       body: JSON.stringify(newAnime),
     });
@@ -69,7 +71,7 @@ function AnimeFrames() {
     }
   };
 
-  const modifyAnime = async (id,e) => {
+  const modifyAnime = async (id, e) => {
     e.preventDefault();
     const updatedAnime = {
       name: nameRef.current.value,
@@ -83,6 +85,7 @@ function AnimeFrames() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${JWT_TOKEN}`,
       },
       body: JSON.stringify(updatedAnime),
     });
@@ -97,15 +100,16 @@ function AnimeFrames() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${JWT_TOKEN}`,
         },
         body: JSON.stringify(animeToDelete),
       });
     }
   };
-  
+
   useEffect(() => {
     retrieveAllAnimes();
-  }, [modifyAnime,deleteAnime,handleEpisodeChange,filter]);
+  }, [modifyAnime, deleteAnime, handleEpisodeChange, filter]);
 
   const getAnimeLink = async (id) => {
     const anime = await fetch(`${URL}${id}`);
@@ -174,7 +178,7 @@ function AnimeFrames() {
                   DELETE
                 </button>
                 {formModifyAnime === anime._id && (
-                  <form className="formModify" onSubmit={(e) => modifyAnime(anime._id,e)}>
+                  <form className="formModify" onSubmit={(e) => modifyAnime(anime._id, e)}>
                     <input type="text" name="name" placeholder="name" defaultValue={anime.name} ref={nameRef} />
                     <input type="text" name="lastEpisodeView" placeholder="lastEpisodeView" defaultValue={anime.lastEpisodeView} ref={lastEpisodeSeenRef} />
                     <input type="text" placeholder="1" defaultValue={anime.currentSeason} ref={currentSeasonRef} />

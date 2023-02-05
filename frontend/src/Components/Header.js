@@ -1,8 +1,10 @@
 import "./../styles/header.css";
 import { useState, useRef, useContext } from "react";
 import { AnimeFilterContext } from "./AnimeFilter";
+import Cookies from "js-cookie";
 
 const URL = "http://localhost:3000/animes/";
+const JWT_TOKEN = Cookies.get("JWTtoken");
 
 function Header() {
   const nameRef = useRef(null);
@@ -29,6 +31,7 @@ function Header() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${JWT_TOKEN}`,
       },
       body: JSON.stringify(newAnime),
     });
