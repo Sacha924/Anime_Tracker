@@ -1,0 +1,24 @@
+body {
+  background: #222222;
+  color: #f2f2f2;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+.Auth-form-container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  width: 94%;
+  height: 100vh;
+  color: #f2f2f2;
+  background: #222222;
+  margin: 10% 3% 0% 3%;
+}
+
+.link-primary:hover,
+a:hover {
+  cursor: pointer;
+}
