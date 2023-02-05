@@ -1,16 +1,8 @@
 # Anime Tracker
 
-In the Frontend Folder : npx create-react-app .
-
-In the backend Folder :
-
-1- npm init
-2- npm i express –save
-3- npm i mongoose
-4- npm i body-parser
-5- npm i dotenv
-6- npm i cors
-
+à ajouter :
+nom du username dans le manga model, comme ca je pourrais trier par username et chaque user aura son affichage différent enf ct de ses mangas
+système de watch more qui doit handle les seasons
 ## MongoDB Atlas
 
 MongoDB Atlas is a fully-managed cloud service for MongoDB, provided by MongoDB Inc. It allows you to easily deploy, manage, and scale MongoDB databases in the cloud. With MongoDB Atlas, you can:
