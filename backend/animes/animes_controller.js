@@ -6,6 +6,8 @@ require("../auth/jwt.strategy");
 
 router.get("/", animesService.getAllAnime);
 
+router.get("/:userName", animesService.getAllAnimeByUserName);
+
 router.get("/:id", animesService.getAnime);
 
 router.post("/", passport.authenticate("jwt"), animesService.createAnime);

@@ -8,6 +8,13 @@ exports.getAllAnime = (req, res) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+exports.getAllAnimeByUserName = (req, res) => {
+  animeModel
+    .find({ userNameWhoAddIt: req.params.userName })
+    .then((result) => res.status(200).json(result))
+    .catch((error) => res.status(500).json({ error }));
+};
+
 exports.getAnime = (req, res) => {
   animeModel
     .findOne({ _id: req.params.id })

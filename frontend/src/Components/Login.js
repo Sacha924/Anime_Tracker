@@ -32,6 +32,7 @@ export default function Login() {
           .then((res) => res.json())
           .then((data) => {
             Cookies.set("JWTtoken", data.token);
+            Cookies.set("Username", username);
             navigate("/app");
           })
           .catch(() => setErrorMessage("Paire login/mot de passe incorrecte"))
@@ -50,7 +51,7 @@ export default function Login() {
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">{authMode}</h3>
           <div className="text-center">
-            Not registered yet? 
+            Not registered yet?
             <span className="link-primary" onClick={changeAuthMode}>
               {authMode === "Sign In" ? " Sign Up" : " Sign In"}
             </span>

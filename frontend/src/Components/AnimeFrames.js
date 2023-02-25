@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 const URL = "http://localhost:3000/animes/";
 const JWT_TOKEN = Cookies.get("JWTtoken");
+const USERNAME = Cookies.get("Username");
 
 function AnimeFrames() {
   // UseRef Statements
@@ -23,9 +24,10 @@ function AnimeFrames() {
   const { filter } = useContext(AnimeFilterContext);
 
   const retrieveAllAnimes = async () => {
-    const response = await fetch(URL);
+    const response = await fetch(`${URL}${USERNAME}`);
     const data = await response.json();
     const filteredData = filter !== "" ? data.filter((anime) => anime.name.toLowerCase().includes(filter)) : data;
+    console.log(filteredData);
     setAnimeList(filteredData);
   };
 

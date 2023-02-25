@@ -3,12 +3,13 @@
 const mongoose = require("mongoose");
 
 const animeSchema = new mongoose.Schema({
-  name: { type: String, unique: true, required: true },
+  name: { type: String, required: true },
   lastEpisodeView: { type: Number, required: true },
   currentSeason: { type: Number },
   maxEpPerSeason: { type: Number },
   coverUrl: { type: String },
   animeLink: { type: String },
+  userNameWhoAddIt: { type: String },
 });
 
 const Anime = mongoose.model("animes", animeSchema); // so animes is the name of my collection on the DB

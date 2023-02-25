@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 const URL = "http://localhost:3000/animes/";
 const JWT_TOKEN = Cookies.get("JWTtoken");
+const USERNAME = Cookies.get("Username");
 
 function Header() {
   const nameRef = useRef(null);
@@ -26,6 +27,7 @@ function Header() {
       maxEpPerSeason: numOfEpPerSeasonRef.current.value,
       coverUrl: coverURLRef.current.value,
       animeLink: animeEpisodeLinkRef.current.value,
+      userNameWhoAddIt: USERNAME,
     };
     await fetch(URL, {
       method: "POST",
