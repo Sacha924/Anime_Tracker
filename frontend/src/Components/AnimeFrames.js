@@ -4,10 +4,10 @@ import { AnimeFilterContext } from "./AnimeFilter";
 import Cookies from "js-cookie";
 
 const URL = "http://localhost:3000/animes/";
-const JWT_TOKEN = Cookies.get("JWTtoken");
-const USERNAME = Cookies.get("Username");
 
 function AnimeFrames() {
+  const JWT_TOKEN = Cookies.get("JWTtoken");
+  const USERNAME = Cookies.get("Username");
   // UseRef Statements
   const nameRef = useRef(null);
   const lastEpisodeSeenRef = useRef(null);
@@ -137,6 +137,12 @@ function AnimeFrames() {
     window.location.href = link;
   };
 
+  const logOut = async () => {
+    Cookies.remove("JWT_TOKEN");
+    Cookies.remove("Username");
+    window.location.href = "/";
+  };
+
   return (
     <div className="App">
       <div>
@@ -203,6 +209,9 @@ function AnimeFrames() {
           </div>
         ))}
       </div>
+      <button className="logout" onClick={logOut}>
+        LOGOUT
+      </button>
     </div>
   );
 }
