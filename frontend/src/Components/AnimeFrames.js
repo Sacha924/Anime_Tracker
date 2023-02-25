@@ -138,7 +138,7 @@ function AnimeFrames() {
   };
 
   const logOut = async () => {
-    Cookies.remove("JWT_TOKEN");
+    Cookies.remove("JWTtoken");
     Cookies.remove("Username");
     window.location.href = "/";
   };
