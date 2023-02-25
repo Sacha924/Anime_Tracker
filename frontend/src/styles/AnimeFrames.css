@@ -187,6 +187,23 @@ button:hover {
   cursor: pointer;
 }
 
+.logout {
+  background-color: #ff7043;
+  color: white;
+  font-size: 1.2em;
+  padding: 0.5em 1em;
+  margin-right: 40px;
+  border-radius: 0.3em;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.logout:hover {
+  background-color: #f4511e;
+  cursor: pointer;
+}
+
 button:hover {
   cursor: pointer;
 }
