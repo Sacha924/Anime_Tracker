@@ -29,6 +29,10 @@ function AnimeFrames() {
     setAnimeList(filteredData);
   };
 
+  useEffect(() => {
+    retrieveAllAnimes();
+  }, [filter]);
+
   const handleEpisodeChange = async (id, value) => {
     const anime = await fetch(`${URL}${id}`);
     const data = await anime.json();
@@ -46,6 +50,7 @@ function AnimeFrames() {
       },
       body: JSON.stringify(newAnime),
     });
+    retrieveAllAnimes();
   };
 
   const moreAnime = async (id) => {
@@ -91,6 +96,7 @@ function AnimeFrames() {
     });
 
     setFormModifyAnime(false);
+    retrieveAllAnimes();
   };
 
   const deleteAnime = async (id) => {
@@ -105,11 +111,8 @@ function AnimeFrames() {
         body: JSON.stringify(animeToDelete),
       });
     }
-  };
-
-  useEffect(() => {
     retrieveAllAnimes();
-  }, [modifyAnime, deleteAnime, handleEpisodeChange, filter]);
+  };
 
   const getAnimeLink = async (id) => {
     const anime = await fetch(`${URL}${id}`);
