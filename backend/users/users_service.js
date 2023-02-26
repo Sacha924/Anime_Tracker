@@ -1,6 +1,8 @@
 const userModel = require("./users_model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const speakeasy = require("speakeasy");
+const QRCode = require("qrcode");
 
 async function checkPassword(username, password) {
   const user = await userModel.findOne({ username });
@@ -29,7 +31,26 @@ async function loginUser(req, res) {
   };
   let token = jwt.sign(payload, process.env.JWT_SECRET);
   res.status(200).json({ token });
+}
 
+async function getQRCode(req, res) {
+  const secret = speakeasy.generateSecret({ length: 20 });
+  QRCode.toDataURL(secret.otpauth_url, function (err, data) {
+    res.status(200).json({ QRcodeURL: data, secret: secret.ascii });
+  });
+}
+
+async function verifyCode(req, res) {
+  let bool = speakeasy.totp.verify({
+    secret: req.body.secret,
+    encoding: "ascii",
+    token: req.body.token,
+  });
+  if (bool) {
+    res.status(200).json({ msg: "Code correct" });
+  } else {
+    res.status(400).json({ msg: "Code incorrect" });
+  }
 }
 
 async function getAllUsers(req, res) {
@@ -44,6 +65,8 @@ async function getCurrentUser(req, res) {
     id: req.user.id,
     username: req.user.username,
     password: req.user.password,
+    secret: req.user.secret,
+    QRcodeURL: req.user.QRcodeURL,
   });
 }
 
@@ -54,6 +77,8 @@ async function updateCurrentUser(req, res) {
       {
         username: req.body.username,
         password: await bcrypt.hash(req.body.password, 10),
+        secret: req.body.secret,
+        QRcodeURL: req.body.QRcodeURL,
       },
       {
         new: true,
@@ -74,6 +99,8 @@ async function deleteCurrentUser(req, res) {
 module.exports = {
   registerUser,
   loginUser,
+  getQRCode,
+  verifyCode,
   getAllUsers,
   checkPassword,
   getCurrentUser,
