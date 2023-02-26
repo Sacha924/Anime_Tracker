@@ -3,6 +3,9 @@
 à ajouter :
 bouton de déconnexion + système de watch more qui doit handle les seasons
 
+
+I create an api using express and make a front end with react. I have a login system and then, in my front i'm displaying animes that i store on a mongoDB database store with mongoAtlas. I retrieve datas from this DB by doing api calls, my api created with express use Mongoose to do so.
+
 ## MongoDB Atlas
 
 MongoDB Atlas is a fully-managed cloud service for MongoDB, provided by MongoDB Inc. It allows you to easily deploy, manage, and scale MongoDB databases in the cloud. With MongoDB Atlas, you can:
