@@ -3,6 +3,7 @@ import "./../styles/Login.css";
 import React, { useState, useRef, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
 const SERVER_URL = "http://localhost:3000/users";
 
@@ -12,6 +13,9 @@ export default function Login() {
   const [mode_2FA, setMode_2FA] = useState(false);
   const [QRcodeURL, setQRcodeURL] = useState(null);
   const [secret, setSecret] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -34,10 +38,20 @@ export default function Login() {
     authMode === "Sign In"
       ? await fetch(SERVER_URL + "/login", options)
           .then((res) => res.json())
-          .then((data) => {
+          .then(async (data) => {
             Cookies.set("JWTtoken", data.token);
             Cookies.set("Username", username);
-            mode_2FA ? show2FAQRCode(username, password) : navigate("/app");
+            const datas = await fetch(`${SERVER_URL}/me`, {
+              method: "GET",
+              headers: {
+                Authorization: "Bearer " + Cookies.get("JWTtoken"),
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                return data;
+              });
+            datas.QRcodeURL !== undefined ? show2FAQRCode() : setModalIsOpen(true);
           })
           .catch(() => setErrorMessage("Paire login/mot de passe incorrecte"))
       : await fetch(SERVER_URL + "/register", options)
@@ -49,9 +63,24 @@ export default function Login() {
           .catch((e) => setErrorMessage(e.message));
   };
 
-  const show2FAQRCode = async (username, password) => {
+  const handleYesClick = () => {
+    setModalIsOpen(false);
+    setMode_2FA(true);
+    show2FAQRCode();
+  };
+
+  const handleNoClick = () => {
+    setModalIsOpen(false);
+    navigate("/app");
+  };
+
+  const show2FAQRCode = async () => {
     // we are going to create a qrcode/secret that will be stored for the 2fa
     // but before that we need to check if the qrcode and secret were already created (it's the case if the user has already used the 2fa auth)
+    setMode_2FA(true);
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+
     const datas = await fetch(`${SERVER_URL}/me`, {
       method: "GET",
       headers: {
@@ -62,7 +91,6 @@ export default function Login() {
       .then((data) => {
         return data;
       });
-    console.log(datas);
     if (datas.QRcodeURL && datas.secret) {
       setQRcodeURL(datas.QRcodeURL);
       setSecret(datas.secret);
@@ -74,7 +102,6 @@ export default function Login() {
         },
       });
       const data = await response.json();
-      console.log(data);
       await fetch(`${SERVER_URL}/me`, {
         method: "PUT",
         headers: {
@@ -89,7 +116,6 @@ export default function Login() {
         }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
         .catch((error) => console.log(error));
 
       setSecret(data.secret);
@@ -119,8 +145,14 @@ export default function Login() {
       })
       .catch((e) => setErrorMessage(e.message));
   };
+
   return (
     <div className="Auth-form-container">
+      <Modal isOpen={modalIsOpen} style={{ background: "black", color: "white" }}>
+        <h2>Do you want to activate double authentication ?</h2>
+        <button onClick={handleYesClick}>Yes</button>
+        <button onClick={handleNoClick}>No</button>
+      </Modal>
       <form className="Auth-form" onSubmit={handleSubmit}>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">{authMode}</h3>
@@ -132,11 +164,11 @@ export default function Login() {
           </div>
           <div className="form-group mt-3">
             <label>Username</label>
-            <input type="username" className="form-control mt-1" placeholder="Enter username" />
+            <input type="username" className="form-control mt-1" placeholder="Enter username" ref={usernameRef} />
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
-            <input type="password" className="form-control mt-1" placeholder="Enter password" />
+            <input type="password" className="form-control mt-1" placeholder="Enter password" ref={passwordRef} />
           </div>
           <div className="d-grid gap-2 mt-3">
             <button type="submit" className="btn btn-primary">
@@ -150,13 +182,7 @@ export default function Login() {
 
         {errorMessage && errorMessage}
       </form>
-      <button
-        onClick={() => {
-          setMode_2FA(!mode_2FA);
-        }}
-      >
-        {mode_2FA ? "Desactivate 2FA" : "Activate 2FA"}
-      </button>
+
       {mode_2FA && QRcodeURL !== null && (
         <div>
           <p>Scan this QR code with your Google Authenticator app</p>
