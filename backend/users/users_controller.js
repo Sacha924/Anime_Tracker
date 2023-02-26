@@ -8,6 +8,11 @@ router.post("/register", userService.registerUser);
 
 router.post("/login", passport.authenticate("local"), userService.loginUser);
 
+router.get("/2fa", userService.getQRCode);
+
+router.post("/2faVerify", userService.verifyCode);
+
+
 router.get("/", passport.authenticate("jwt"), userService.getAllUsers);
 
 router.get("/me", passport.authenticate("jwt"), userService.getCurrentUser);
