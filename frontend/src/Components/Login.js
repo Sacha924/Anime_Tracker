@@ -14,6 +14,7 @@ export default function Login() {
   const [QRcodeURL, setQRcodeURL] = useState(null);
   const [secret, setSecret] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [firstTimeQrCodeAppear, setFirstTimeQrCodeAppear] = useState(false);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -41,17 +42,12 @@ export default function Login() {
           .then(async (data) => {
             Cookies.set("JWTtoken", data.token);
             Cookies.set("Username", username);
-            const datas = await fetch(`${SERVER_URL}/me`, {
-              method: "GET",
-              headers: {
-                Authorization: "Bearer " + Cookies.get("JWTtoken"),
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                return data;
-              });
-            datas.QRcodeURL !== undefined ? show2FAQRCode() : setModalIsOpen(true);
+            const datas = await getUserInfos();
+            if (datas.QRcodeURL !== undefined) show2FAQRCode();
+            else {
+              setModalIsOpen(true);
+              setFirstTimeQrCodeAppear(true);
+            }
           })
           .catch(() => setErrorMessage("Paire login/mot de passe incorrecte"))
       : await fetch(SERVER_URL + "/register", options)
@@ -81,16 +77,8 @@ export default function Login() {
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
 
-    const datas = await fetch(`${SERVER_URL}/me`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + Cookies.get("JWTtoken"),
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        return data;
-      });
+    const datas = await getUserInfos();
+
     if (datas.QRcodeURL && datas.secret) {
       setQRcodeURL(datas.QRcodeURL);
       setSecret(datas.secret);
@@ -146,6 +134,20 @@ export default function Login() {
       .catch((e) => setErrorMessage(e.message));
   };
 
+  const getUserInfos = async () => {
+    const datas = await fetch(`${SERVER_URL}/me`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + Cookies.get("JWTtoken"),
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        return data;
+      });
+    return datas;
+  };
+
   return (
     <div className="Auth-form-container">
       <Modal isOpen={modalIsOpen} style={{ background: "black", color: "white" }}>
@@ -179,14 +181,17 @@ export default function Login() {
             Forgot <a href="#">password?</a>
           </p>
         </div>
-
         {errorMessage && errorMessage}
       </form>
 
       {mode_2FA && QRcodeURL !== null && (
         <div>
-          <p>Scan this QR code with your Google Authenticator app</p>
-          <img src={QRcodeURL} />
+          {firstTimeQrCodeAppear && (
+            <>
+              <p>Scan this QR code with your Google Authenticator app</p>
+              <img src={QRcodeURL} />
+            </>
+          )}
           <form onSubmit={codeVerification}>
             <input type="text" placeholder="Enter your code" />
             <button type="submit">Submit</button>
