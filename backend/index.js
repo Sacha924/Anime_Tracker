@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 require("dotenv").config();
+require("./auth/googleAuth");
+const passport = require("passport");
 
 const app = express();
 const port = 3000;
@@ -20,8 +22,26 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(passport.initialize());
 app.use("/users", userController);
 app.use("/animes", animeController);
+
+app.get("/", (req, res) => {
+  res.send('<a href="/auth/google">Authenticate with Google</a>');
+});
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile"] }, (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  })
+);
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:8080/app",
+    failureRedirect: "http://localhost:8080/",
+  })
+);
 
 const main = async () => {
   mongoose.set("strictQuery", true);
