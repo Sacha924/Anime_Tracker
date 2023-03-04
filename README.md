@@ -7,8 +7,15 @@ This project is a full-stack web application developed with Express for the back
 
 here is a preview of the application with some animations that I added:
 
-![first image](https://github.com/Sacha924/Anime_Tracker/ImagesForREADME/Capture1.JPG)
-![Second image](https://github.com/Sacha924/Anime_Tracker/ImagesForREADME/Capture1.JPG)
+![first image](/ImagesForREADME/Capture1.JPG)
+
+<br/>
+
+At the top you can Add Animes and search for specific Anime. And then you have the rest of your custom list of anime 
+
+<br/>
+
+![Second image](/ImagesForREADME/Capture2.JPG)
 
 Once you are connected on the app, here is an example of what I put to add Jujutsu Kaisen Anime :
 
@@ -28,6 +35,8 @@ Anime Episode Link : "https://v2.voiranime.com/anime/jujutsu-kaisen/"
 
 For the Cover URL you need to search a cool image that you want to use for the cover. For the anime episode link, you need to copy and paste the URL from voiranime site when you search for your anime. Dont put a link to a specific episode ! The app will handle this for you. And it is recommanded to not put link from other site because it may not work because of the seasons/episodes nums.
 
+---
+
 ## backend
 
 In this project, there are three main folders named anime, auth, and users. The folders "anime" and "users" represent a collection in the MongoDB database and contain the three main components of the Model-Controller-Service (MCS) design pattern, which helps to organize the code.
@@ -40,17 +49,25 @@ These authentication strategies have been implemented to protect certain routes 
 
 The second strategy is the "jwt" strategy which is used to authenticate a user using a JSON Web Token (JWT). If the user try to access to a protected root and is not authenticated, they are denied access to the endpoint.
 
+---
+
 ## 2FA and other ways to connect
 
 In my project, I am working on implementing multiple ways for users to access the application. One of the methods I have implemented involves using 2-factor authentication with Google Authenticator. When a user activates this feature for the first time, they must scan a QR code with the Google Authenticator app and then enter the 6-digit code it generates.
+
+---
 
 ## frontend
 
 In the front-end, the project is based on a React application consisting of several components such as a login component. Once the user enters the application, the main page is made up of multiple components including a header and an AnimeFrame component. The AnimeFrame component organizes a frame for each anime with the location of all buttons and text. The anime list is mapped to apply this rendering to all animes in the list (that are retrieved from the DB).
 
+---
+
 ## 2FA
 
 In my project, I am working on implementing multiple ways for users to access the application. One of the methods I have implemented involves using 2-factor authentication with Google Authenticator. When a user activates this feature for the first time, they must scan a QR code with the Google Authenticator app and then enter the 6-digit code it generates.
+
+---
 
 ## MongoDB Atlas
 
