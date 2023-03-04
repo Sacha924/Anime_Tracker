@@ -1,6 +1,5 @@
-à ajouter :
-bouton de déconnexion + système de watch more qui doit handle les seasons
-JE ne dois pas réafficher le qrcode si c pas la premi_ère fois qu'il utilise le 2FA PSQ SINn n'importequi pourrait se co enft
+TODO :
+"watch more" system that didn't handle properly the season change
 
 # Anime Tracker
 
@@ -12,7 +11,7 @@ In this project, there are three main folders named anime, auth, and users. The 
 
 The Model component defines the structure of the data that is stored in the database. The Controller component contains the API endpoints that allow the client to interact with the data. The Service component contains the business logic that is used by the controllers to perform specific tasks.
 
-The "auth" folder contains two files, "localstrategy.js" and "jwtStrategy.js", which implement the Passport.js library to handle user authentication. The "localstrategy.js" file defines a local authentication strategy using Passport.js that checks if a user's credentials are valid, while the "jwtStrategy.js" file defines a JSON Web Token (JWT) authentication strategy that allows users to authenticate using tokens.
+The "auth" folder contains 3 files, "localstrategy.js", "googleAuth.js", and "jwtStrategy.js" which implement the Passport.js library to handle user authentication. The "localstrategy.js" file defines a local authentication strategy using Passport.js that checks if a user's credentials are valid, while the "jwtStrategy.js" file defines a JSON Web Token (JWT) authentication strategy that allows users to authenticate using tokens. The googleAuth.js file exports a Passport strategy for authenticating with Google using the OAuth 2.0 API. It uses the passport-google-oauth2 module, which provides an implementation of the Google OAuth 2.0 authentication flow.
 
 These authentication strategies have been implemented to protect certain routes of the application. The first strategy is the "local" strategy which is used to authenticate a user locally (i.e., with a username and password). It is used to protect the "/login" endpoint. When a user tries to access this endpoint, the authentication middleware checks if the user is authenticated using the "local" strategy. If the user is not authenticated, they are redirected to the login page.
 
