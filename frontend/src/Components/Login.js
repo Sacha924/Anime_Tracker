@@ -40,7 +40,7 @@ export default function Login() {
           .then(async (data) => {
             Cookies.set("JWTtoken", data.token);
             Cookies.set("Username", username);
-            setUserPasswordVerify(true);
+            // setUserPasswordVerify(true);
             const datas = await getUserInfos();
             if (datas.QRcodeURL !== undefined) show2FAQRCode();
             else {
@@ -67,7 +67,8 @@ export default function Login() {
 
   const handleNoClick = () => {
     setModalIsOpen(false);
-    if (!isOTPactive) navigate("/app");
+    // if (!isOTPactive) 
+    navigate("/app");
   };
 
   const show2FAQRCode = async () => {
@@ -203,7 +204,7 @@ export default function Login() {
       </form>
 
       {mode_2FA && QRcodeURL !== null && (
-        <div>
+        <div className="TwoFAContainer">
           {firstTimeQrCodeAppear && (
             <>
               <p>Scan this QR code with your Google Authenticator app</p>
