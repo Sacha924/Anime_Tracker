@@ -5,6 +5,29 @@ TODO :
 
 This project is a full-stack web application developed with Express for the back-end and React for the front-end. The application includes a user authentication system and displays anime data retrieved from a MongoDB database hosted on MongoDB Atlas. The back-end API utilizes Mongoose to interact with the database and allows the front-end to make API calls to fetch data.
 
+here is a preview of the application with some animations that I added:
+
+![first image](https://github.com/Sacha924/Anime_Tracker/ImagesForREADME/Capture1.JPG)
+![Second image](https://github.com/Sacha924/Anime_Tracker/ImagesForREADME/Capture1.JPG)
+
+Once you are connected on the app, here is an example of what I put to add Jujutsu Kaisen Anime :
+
+You click on Add Anime button (top left corner) and fill the form :
+
+name : Jujutsu Kaisen
+
+Last Episode Seen : : 24
+
+Current Season : 2
+
+number of episodes per season : 24
+
+Cover URL : "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/c…"
+
+Anime Episode Link : "https://v2.voiranime.com/anime/jujutsu-kaisen/"
+
+For the Cover URL you need to search a cool image that you want to use for the cover. For the anime episode link, you need to copy and paste the URL from voiranime site when you search for your anime. Dont put a link to a specific episode ! The app will handle this for you. And it is recommanded to not put link from other site because it may not work because of the seasons/episodes nums.
+
 ## backend
 
 In this project, there are three main folders named anime, auth, and users. The folders "anime" and "users" represent a collection in the MongoDB database and contain the three main components of the Model-Controller-Service (MCS) design pattern, which helps to organize the code.
