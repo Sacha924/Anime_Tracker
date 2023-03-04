@@ -3,6 +3,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
 const QRCode = require("qrcode");
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const { AuthClient } = require("google-auth-library");
+require("dotenv").config();
+
+// for the email part
+const oAuth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.REDIRECT_URI);
+oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
 async function checkPassword(username, password) {
   const user = await userModel.findOne({ username });
@@ -49,7 +57,43 @@ async function verifyCode(req, res) {
   if (bool) {
     res.status(200).json({ msg: "Code correct" });
   } else {
-    res.status(400).json({ msg: "Code incorrect" });
+    res.status(400).json({ code: "pour l'instant r" });
+  }
+}
+
+async function sendOTPCode(req, res) {
+  try {
+    const email = req.body.email;
+    const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.EMAIL_USER,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Access Code for AnimeTracker app",
+      text: `Your access code is ${code}`,
+    };
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      message: "OTP Code sent to your email",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Failed to send OTP code",
+    });
   }
 }
 
@@ -101,6 +145,7 @@ module.exports = {
   loginUser,
   getQRCode,
   verifyCode,
+  sendOTPCode,
   getAllUsers,
   checkPassword,
   getCurrentUser,

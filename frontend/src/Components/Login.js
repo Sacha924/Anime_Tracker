@@ -10,19 +10,17 @@ const SERVER_URL = "http://localhost:3000/users";
 export default function Login() {
   const [authMode, setAuthMode] = useState("Sign In");
   const [errorMessage, setErrorMessage] = useState(null);
+  // const [userPasswordVerify, setUserPasswordVerify] = useState(false);
   const [mode_2FA, setMode_2FA] = useState(false);
   const [QRcodeURL, setQRcodeURL] = useState(null);
   const [secret, setSecret] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [firstTimeQrCodeAppear, setFirstTimeQrCodeAppear] = useState(false);
+  // const [isOTPactive, setIsOTPactive] = useState(false);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
   const navigate = useNavigate();
-
-  const changeAuthMode = () => {
-    setAuthMode(authMode === "Sign In" ? "Sign Up" : "Sign In");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,12 +40,14 @@ export default function Login() {
           .then(async (data) => {
             Cookies.set("JWTtoken", data.token);
             Cookies.set("Username", username);
+            setUserPasswordVerify(true);
             const datas = await getUserInfos();
             if (datas.QRcodeURL !== undefined) show2FAQRCode();
             else {
               setModalIsOpen(true);
               setFirstTimeQrCodeAppear(true);
             }
+            setErrorMessage(null);
           })
           .catch(() => setErrorMessage("Paire login/mot de passe incorrecte"))
       : await fetch(SERVER_URL + "/register", options)
@@ -67,7 +67,7 @@ export default function Login() {
 
   const handleNoClick = () => {
     setModalIsOpen(false);
-    navigate("/app");
+    if (!isOTPactive) navigate("/app");
   };
 
   const show2FAQRCode = async () => {
@@ -148,6 +148,24 @@ export default function Login() {
     return datas;
   };
 
+  // const sendOTPcode = async (e) => {
+  //   e.preventDefault();
+  //   const email = e.target[0].value;
+  //   await fetch(`${SERVER_URL}/sendOTPCode`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email: email }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  // };
+
+  // const verifyOTPcode = async () => {};
+
   return (
     <div className="Auth-form-container">
       <Modal isOpen={modalIsOpen} style={{ background: "black", color: "white" }}>
@@ -160,7 +178,7 @@ export default function Login() {
           <h3 className="Auth-form-title">{authMode}</h3>
           <div className="text-center">
             Not registered yet?
-            <span className="link-primary" onClick={changeAuthMode}>
+            <span className="link-primary" onClick={() => setAuthMode(authMode === "Sign In" ? "Sign Up" : "Sign In")}>
               {authMode === "Sign In" ? " Sign Up" : " Sign In"}
             </span>
           </div>
@@ -192,12 +210,28 @@ export default function Login() {
               <img src={QRcodeURL} />
             </>
           )}
+          <p>Enter the code from your Google Authenticator app</p>
           <form onSubmit={codeVerification}>
             <input type="text" placeholder="Enter your code" />
             <button type="submit">Submit</button>
           </form>
         </div>
       )}
+      {/* <button onClick={() => setIsOTPactive(!isOTPactive)}>{!isOTPactive ? "try OTP" : "OTP mode activated"}</button>
+      {isOTPactive && userPasswordVerify && (
+        <div>
+          <p>Once you send your username and password, give us an email address on which you will receive a code to access to the app</p>
+          <form className="Auth-form" onSubmit={sendOTPcode}>
+            <input type="email" placeholder="abc@efg.com" />
+            <button type="submit">Submit</button>
+          </form>
+
+          <form onSubmit={verifyOTPcode}>
+            <input type="number" placeholder="123456" />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      )} */}
     </div>
   );
 }

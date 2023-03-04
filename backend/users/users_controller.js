@@ -12,6 +12,8 @@ router.get("/2fa", userService.getQRCode);
 
 router.post("/2faVerify", userService.verifyCode);
 
+router.post("/sendOTPCode", userService.sendOTPCode);
+
 
 router.get("/", passport.authenticate("jwt"), userService.getAllUsers);
 
