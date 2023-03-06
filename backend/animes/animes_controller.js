@@ -8,7 +8,7 @@ router.get("/", animesService.getAllAnime);
 
 router.get("/:userName", animesService.getAllAnimeByUserName);
 
-router.get("/:id", animesService.getAnime);
+router.get("/id/:id", animesService.getAnime);
 
 router.post("/", passport.authenticate("jwt"), animesService.createAnime);
 

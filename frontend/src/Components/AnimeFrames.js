@@ -27,7 +27,6 @@ function AnimeFrames() {
     const response = await fetch(`${URL}${USERNAME}`);
     const data = await response.json();
     const filteredData = filter !== "" ? data.filter((anime) => anime.name.toLowerCase().includes(filter)) : data;
-    console.log(filteredData);
     setAnimeList(filteredData);
   };
 
@@ -36,7 +35,7 @@ function AnimeFrames() {
   }, [filter]);
 
   const handleEpisodeChange = async (id, value) => {
-    const anime = await fetch(`${URL}${id}`);
+    const anime = await fetch(`${URL}id/${id}`);
     const data = await anime.json();
     let newAnime = {};
     if (data.maxEpPerSeason === data.lastEpisodeView && value === 1) newAnime = { ...data, lastEpisodeView: 1, currentSeason: data.currentSeason + 1 };
