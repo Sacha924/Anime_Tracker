@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
-const SERVER_URL = "http://localhost:3000/users";
+const SERVER_URL = "https://anime-tracker.onrender.com/users";
 
 export default function Login() {
   const [authMode, setAuthMode] = useState("Sign In");
@@ -67,7 +67,7 @@ export default function Login() {
 
   const handleNoClick = () => {
     setModalIsOpen(false);
-    // if (!isOTPactive) 
+    // if (!isOTPactive)
     navigate("/app");
   };
 

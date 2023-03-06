@@ -3,7 +3,7 @@ import { useState, useRef, useContext } from "react";
 import { AnimeFilterContext } from "./AnimeFilter";
 import Cookies from "js-cookie";
 
-const URL = "http://localhost:3000/animes/";
+const URL = "https://anime-tracker.onrender.com/animes/";
 const JWT_TOKEN = Cookies.get("JWTtoken");
 const USERNAME = Cookies.get("Username");
 
