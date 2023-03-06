@@ -18,7 +18,7 @@ function AnimeFrames() {
   // UseState Statements
   const [animeList, setAnimeList] = useState([]);
   const [formModifyAnime, setFormModifyAnime] = useState(false);
-  const [message, setMessage] = useState("▶ Watch More");
+  const [displayMoreAnime, setDisplayMoreAnime] = useState(null);
   const [list, setList] = useState(null);
   // UseContext Statement
   const { filter } = useContext(AnimeFilterContext);
@@ -55,26 +55,43 @@ function AnimeFrames() {
   };
 
   const moreAnime = async (id) => {
-    if (list === null) {
-      const newList = [];
-      const anime = await fetch(`${URL}${id}`);
-      const data = await anime.json();
-      for (let i = -5; i <= 6; i++) {
-        if (i !== 1) {
-          const numEp = (parseInt(data.lastEpisodeView) + i).toString().padStart(2, "0");
-          newList.push(
-            <li key={i}>
-              <a href={data.animeLink + numEp}> Episode {numEp} </a>
-            </li>
-          );
-        }
+    setDisplayMoreAnime(id);
+    const newList = [];
+    const anime = await fetch(`${URL}id/${id}`);
+    const data = await anime.json();
+    for (let i = -5; i <= 6; i++) {
+      let season = data.currentSeason;
+      let numEp = parseInt((parseInt(data.lastEpisodeView) + i).toString().padStart(2, "0"));
+      if (numEp > data.maxEpPerSeason) {
+        numEp = numEp % data.maxEpPerSeason;
+        season += 1;
+      } else if (numEp < 1) {
+        numEp += data.maxEpPerSeason;
+        season -= 1;
       }
-      setList(newList);
-      setMessage("❌ Close This");
-    } else {
-      setList(null);
-      setMessage("▶ Watch More");
+
+      let link = data.animeLink;
+      const animeName = link.split("/")[4].split("/")[0];
+      if (![null, 1].includes(season)) {
+        link = link.replace(`/${animeName}/`, `/${animeName}-${season}/`);
+        link += `saison-${season}-`;
+      }
+      const animeLink = link + (parseInt(numEp) + 1).toString().padStart(2, "0") + "-vostfr/";
+      console.log(animeLink);
+
+      if (season != -1) {
+        newList.push(
+          <li key={i}>
+            <a href={data.animeLink + numEp} target="_blank">
+              {season ? `Season ${season}` : ""} Episode {numEp}
+            </a>
+          </li>
+        );
+      }
     }
+    if (displayMoreAnime === id) {
+      setDisplayMoreAnime(null);
+    } else setList(newList);
   };
 
   const modifyAnime = async (id, e) => {
@@ -116,7 +133,7 @@ function AnimeFrames() {
   };
 
   const getAnimeLink = async (id) => {
-    const anime = await fetch(`${URL}${id}`);
+    const anime = await fetch(`${URL}id/${id}`);
     const data = await anime.json();
     let link = data.animeLink;
     const animeName = link.split("/")[4].split("/")[0];
@@ -150,9 +167,9 @@ function AnimeFrames() {
             <div className="anime-content">
               <div>
                 <button className="watch-more-button" onClick={() => moreAnime(anime._id)}>
-                  {message}
+                  {displayMoreAnime === anime._id ? "❌ Close This" : "▶ Watch More"}
                 </button>
-                <ul className="listeEpisodesSupplementaire">{list}</ul>
+                {displayMoreAnime === anime._id && <ul className="listeEpisodesSupplementaire">{list}</ul>}
               </div>
               <div className="anime-card">
                 <h1>{anime.name}</h1>
