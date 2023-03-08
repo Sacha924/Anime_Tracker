@@ -38,8 +38,8 @@ app.get(
 app.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:8080/app",
-    failureRedirect: "http://localhost:8080/",
+    successRedirect: "https://anime-tracker-one.vercel.app/app",
+    failureRedirect: "https://anime-tracker-one.vercel.app/",
   })
 );
 
@@ -48,7 +48,7 @@ const main = async () => {
   await mongoose.connect(process.env.MONGO_URI);
   console.log("Connected to MongoDB");
   app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Example app listening at https://anime-tracker.onrender.com`);
   });
 };
 main();

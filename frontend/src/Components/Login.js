@@ -84,7 +84,7 @@ export default function Login() {
       setQRcodeURL(datas.QRcodeURL);
       setSecret(datas.secret);
     } else {
-      const response = await fetch("http://localhost:3000/users/2fa", {
+      const response = await fetch(`${SERVER_URL}/2fa`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
